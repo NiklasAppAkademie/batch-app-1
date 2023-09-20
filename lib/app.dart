@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/features/onboarding/presentation/pages/welcome_page.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -10,10 +11,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(),
-      ),
-    );
+    return const MaterialApp(home: WelcomePage());
   }
 }

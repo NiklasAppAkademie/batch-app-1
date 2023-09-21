@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/core/presentation/styles/border_styles.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
-import 'package:quiz_app/core/presentation/styles/input_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
-import 'package:quiz_app/core/presentation/styles/text_styles.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_app_bar.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_image_picker.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_textfield.dart';
@@ -20,10 +17,15 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   TextEditingController usernameController = TextEditingController();
+  String avatarImagePath = "";
 
   Future<void> createUser() async {
-    User newUser = User(
-        usernameController.text, "", false, DateTime.now(), DateTime.now());
+    User newUser = User(usernameController.text, avatarImagePath, false,
+        DateTime.now(), DateTime.now());
+  }
+
+  void setAvatarImagePath(imagePath) {
+    avatarImagePath = imagePath ?? "";
   }
 
   @override
@@ -38,10 +40,25 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const CustomAppBar(
               text: "Onboarding",
             ),
-            const CustomImagePicker(),
-            CustomTextfield(
-              title: "Username",
-              controller: usernameController,
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: kPaddingVerLarge,
+                child: Column(
+                  children: [
+                    CustomImagePicker(
+                      setImage: setAvatarImagePath,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomTextfield(
+                      title: "Username",
+                      controller: usernameController,
+                    ),
+                  ],
+                ),
+              ),
             ),
             PrimaryButton(
               text: "Weiter",

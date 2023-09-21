@@ -26,7 +26,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
               width: 10,
             ),
             Text(
-              widget.title ?? "",
+              widget.title,
               style: kTextInputTitleLight,
             ),
           ],

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
 import 'package:quiz_app/core/presentation/styles/text_styles.dart';
-import 'package:quiz_app/features/onboarding/presentation/widgets/primary_button.dart';
+import 'package:quiz_app/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:quiz_app/core/presentation/widgets/primary_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -37,7 +38,10 @@ class WelcomePage extends StatelessWidget {
               PrimaryButton(
                   text: "Los Geht's",
                   onPressed: () {
-                    debugPrint("Hello Earth!");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const OnboardingPage()));
                   })
             ]),
       ),

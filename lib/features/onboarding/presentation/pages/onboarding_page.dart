@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
+import 'package:quiz_app/core/presentation/styles/text_styles.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_app_bar.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_image_picker.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_textfield.dart';
@@ -16,16 +18,25 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
+  Box<User> userBox = Hive.box<User>("userBox");
   TextEditingController usernameController = TextEditingController();
   String avatarImagePath = "";
+  bool agbAccepted = false;
 
   Future<void> createUser() async {
-    User newUser = User(usernameController.text, avatarImagePath, false,
-        DateTime.now(), DateTime.now());
+    User newUser = User("1", usernameController.text, avatarImagePath,
+        agbAccepted, DateTime.now(), DateTime.now());
+    userBox.put("1", newUser);
   }
 
   void setAvatarImagePath(imagePath) {
     avatarImagePath = imagePath ?? "";
+  }
+
+  void setAgbAccepted(bool? val) {
+    setState(() {
+      agbAccepted = val ?? false;
+    });
   }
 
   @override
@@ -41,29 +52,53 @@ class _OnboardingPageState extends State<OnboardingPage> {
               text: "Onboarding",
             ),
             Expanded(
-              child: SingleChildScrollView(
+              child: ListView(
                 physics: const BouncingScrollPhysics(),
                 padding: kPaddingVerLarge,
-                child: Column(
-                  children: [
-                    CustomImagePicker(
-                      setImage: setAvatarImagePath,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    CustomTextfield(
-                      title: "Username",
-                      controller: usernameController,
-                    ),
-                  ],
-                ),
+                children: [
+                  CustomImagePicker(
+                    setImage: setAvatarImagePath,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextfield(
+                    title: "Username",
+                    controller: usernameController,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          focusColor: kColorPrimary,
+                          fillColor: MaterialStateProperty.resolveWith(
+                            (states) {
+                              // If the button is pressed, return green, otherwise blue
+                              if (states.contains(MaterialState.pressed)) {
+                                return Colors.green;
+                              }
+                              return kColorPrimary;
+                            },
+                          ),
+                          value: agbAccepted,
+                          onChanged: setAgbAccepted),
+                      const Expanded(
+                        child: Text(
+                          "Hiermit akzeptiere ich die AGB und Dateschnutzerklärung der App Akademie GmbH",
+                          style: kTextInputTitleLight,
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
             PrimaryButton(
               text: "Weiter",
               onPressed: () async {
-                await createUser();
+                // await createUser();
                 Navigator.push(
                     context,
                     MaterialPageRoute(

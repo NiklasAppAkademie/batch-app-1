@@ -17,7 +17,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    // isLoggedIn = userBox.containsKey("1");
+    isLoggedIn = userBox.containsKey("1");
     return MaterialApp(
         home: isLoggedIn ? const CategorySelectionPage() : const WelcomePage());
   }

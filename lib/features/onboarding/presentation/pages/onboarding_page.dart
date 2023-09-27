@@ -70,20 +70,27 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     height: 20,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Checkbox(
-                          focusColor: kColorPrimary,
-                          fillColor: MaterialStateProperty.resolveWith(
-                            (states) {
-                              // If the button is pressed, return green, otherwise blue
-                              if (states.contains(MaterialState.pressed)) {
-                                return Colors.green;
-                              }
-                              return kColorPrimary;
-                            },
-                          ),
-                          value: agbAccepted,
-                          onChanged: setAgbAccepted),
+                      Transform.scale(
+                        scale: 2,
+                        child: Checkbox(
+                            focusColor: kColorPrimary,
+                            fillColor: MaterialStateProperty.resolveWith(
+                              (states) {
+                                if (agbAccepted) {
+                                  return kColorPrimary;
+                                } else {
+                                  return kColorGreyMedium;
+                                }
+                              },
+                            ),
+                            value: agbAccepted,
+                            onChanged: setAgbAccepted),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       const Expanded(
                         child: Text(
                           "Hiermit akzeptiere ich die AGB und Dateschnutzerklärung der App Akademie GmbH",

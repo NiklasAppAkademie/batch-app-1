@@ -5,7 +5,8 @@ class CategoryService {
   CategoryRepository categoryRepository = CategoryRepository();
 
   Future<List<Category>> fetchCategories() async {
-    return categoryRepository.fetchCategoriesFromServer();
+    var categories = await categoryRepository.fetchCategoriesFromServer();
+    return categories;
   }
 
   createNewCategory(Category category) async {

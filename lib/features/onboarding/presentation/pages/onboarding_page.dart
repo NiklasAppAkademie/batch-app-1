@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
-import 'package:quiz_app/core/presentation/styles/text_styles.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_app_bar.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_image_picker.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_textfield.dart';
 import 'package:quiz_app/core/presentation/widgets/primary_button.dart';
 import 'package:quiz_app/features/game_configuration/presentation/pages/category_selection_page.dart';
-import 'package:quiz_app/features/onboarding/domain/user_model.dart';
+import 'package:quiz_app/features/onboarding/application/onboarding_service.dart';
+import 'package:quiz_app/features/onboarding/presentation/widgets/agb_request.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -18,15 +17,18 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  Box<User> userBox = Hive.box<User>("userBox");
+  OnboardingService onboardingService = OnboardingService();
   TextEditingController usernameController = TextEditingController();
   String avatarImagePath = "";
   bool agbAccepted = false;
 
-  Future<void> createUser() async {
-    User newUser = User("1", usernameController.text, avatarImagePath,
-        agbAccepted, DateTime.now(), DateTime.now());
-    userBox.put("1", newUser);
+  Future<void> onNextPressed() async {
+    onboardingService.createUser(
+        name: usernameController.text,
+        agbAccepted: agbAccepted,
+        avatarImagePath: avatarImagePath);
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const CategorySelectionPage()));
   }
 
   void setAvatarImagePath(imagePath) {
@@ -69,48 +71,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Transform.scale(
-                        scale: 2,
-                        child: Checkbox(
-                            focusColor: kColorPrimary,
-                            fillColor: MaterialStateProperty.resolveWith(
-                              (states) {
-                                if (agbAccepted) {
-                                  return kColorPrimary;
-                                } else {
-                                  return kColorGreyMedium;
-                                }
-                              },
-                            ),
-                            value: agbAccepted,
-                            onChanged: setAgbAccepted),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Expanded(
-                        child: Text(
-                          "Hiermit akzeptiere ich die AGB und Dateschnutzerklärung der App Akademie GmbH",
-                          style: kTextInputTitleLight,
-                        ),
-                      )
-                    ],
-                  )
+                  AGBRequest(
+                    setAgbAccepted: setAgbAccepted,
+                    agbAccepted: agbAccepted,
+                  ),
                 ],
               ),
             ),
             PrimaryButton(
               text: "Weiter",
-              onPressed: () async {
-                // await createUser();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CategorySelectionPage()));
-              },
+              onPressed: onNextPressed,
             ),
           ],
         ),

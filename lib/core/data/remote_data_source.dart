@@ -1,24 +1,21 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class RemoteDataSource {
+  Dio dio = Dio();
   Future<dynamic> getData(String url) async {
     try {
-      http.Response response = await http.get(Uri.parse(url));
-      if (response.statusCode >= 400) {
-        throw Exception();
-      }
-      var jsonResponse = jsonDecode(response.body);
-      return jsonResponse;
+      Response response = await dio.get(url);
+      return response.data;
     } catch (err) {
       rethrow;
     }
   }
 
   Future<dynamic> postData(String url, dynamic data) async {
-    http.Response response = await http.post(Uri.parse(url), body: data);
-    var jsonResponse = jsonDecode(response.body);
+    Response response = await dio.post(url, data: data);
+    var jsonResponse = jsonDecode(response.data);
     return jsonResponse;
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464729631584",
+    "project_id": "batch-1-app",
+    "storage_bucket": "batch-1-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464729631584:android:600de7803f7ec024634c05",
+        "android_client_info": {
+          "package_name": "com.example.quiz_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEdExXdc8Zh6tymhSttQHgb89RMlLGH08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

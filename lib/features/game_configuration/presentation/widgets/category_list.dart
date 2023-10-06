@@ -6,7 +6,7 @@ import 'package:quiz_app/features/game_configuration/presentation/widgets/catego
 class CategoryList extends StatefulWidget {
   final Category? selectedCategory;
   final Function(Category) selectCategory;
-  CategoryList(
+  const CategoryList(
       {super.key, this.selectedCategory, required this.selectCategory});
 
   @override

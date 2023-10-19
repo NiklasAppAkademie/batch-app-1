@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:quiz_app/core/presentation/styles/border_styles.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
+import 'package:quiz_app/features/onboarding/presentation/providers/onboarding_provider.dart';
 
 class CustomImagePicker extends StatefulWidget {
-  final Function setImage;
-
-  const CustomImagePicker({super.key, required this.setImage});
+  const CustomImagePicker({super.key});
 
   @override
   State<CustomImagePicker> createState() => _CustomImagePickerState();
@@ -24,7 +24,7 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
     setState(() {
       imagePath = tempImagePath;
     });
-    widget.setImage(imagePath);
+    context.read<OnboardingProvider>().setAvatarImagePath(imagePath);
   }
 
   @override

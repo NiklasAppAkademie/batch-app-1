@@ -5,24 +5,10 @@ import 'package:quiz_app/core/presentation/styles/position_styles.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_app_bar.dart';
 import 'package:quiz_app/core/presentation/widgets/primary_button.dart';
 import 'package:quiz_app/features/game/presentation/game_page.dart';
-import 'package:quiz_app/features/game_configuration/domain/category_model.dart';
 import 'package:quiz_app/features/game_configuration/presentation/widgets/category_list.dart';
 
-class CategorySelectionPage extends StatefulWidget {
+class CategorySelectionPage extends StatelessWidget {
   const CategorySelectionPage({super.key});
-
-  @override
-  State<CategorySelectionPage> createState() => _CategorySelectionPageState();
-}
-
-class _CategorySelectionPageState extends State<CategorySelectionPage> {
-  Category? selectedCategory;
-
-  setSelectedCategory(Category category) {
-    setState(() {
-      selectedCategory = category;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +22,12 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
             const CustomAppBar(
               text: "Kategorien",
             ),
-            CategoryList(
-              selectedCategory: selectedCategory,
-              selectCategory: setSelectedCategory,
-            ),
+            const CategoryList(),
             PrimaryButton(
               text: "Weiter",
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            GamePage(category: selectedCategory!)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const GamePage()));
               },
             )
           ],

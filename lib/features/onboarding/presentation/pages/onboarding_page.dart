@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz_app/core/presentation/providers/app_provider.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
 import 'package:quiz_app/core/presentation/widgets/custom_app_bar.dart';
@@ -15,54 +16,57 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<OnboardingProvider>(builder: (context, provider, child) {
-      return Scaffold(
-        backgroundColor: kColorGreyDark,
-        body: Padding(
-          padding: kPaddingLarge,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const CustomAppBar(
-                text: "Onboarding",
-              ),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: kPaddingVerLarge,
-                  children: [
-                    const CustomImagePicker(),
-                    const SizedBox(
-                      height: 20,
+    return Scaffold(
+      backgroundColor: kColorGreyDark,
+      body: Padding(
+        padding: kPaddingLarge,
+        child: Consumer2<OnboardingProvider, AppProvider>(
+            child: const CustomAppBar(
+              text: "Onboarding",
+            ),
+            builder: (context, onboardingProvider, appProvider, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  child!,
+                  Expanded(
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: kPaddingVerLarge,
+                      children: [
+                        const CustomImagePicker(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CustomTextfield(
+                          title: "Username",
+                          controller: onboardingProvider.usernameController,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        AGBRequest(
+                          setAgbAccepted: onboardingProvider.setAgbAccepted,
+                          agbAccepted: onboardingProvider.agbAccepted,
+                        ),
+                      ],
                     ),
-                    CustomTextfield(
-                      title: "Username",
-                      controller: provider.usernameController,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AGBRequest(
-                      setAgbAccepted: provider.setAgbAccepted,
-                      agbAccepted: provider.agbAccepted,
-                    ),
-                  ],
-                ),
-              ),
-              PrimaryButton(
-                text: "Weiter",
-                onPressed: () {
-                  provider.createUser();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CategorySelectionPage()));
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+                  ),
+                  PrimaryButton(
+                    text: "Weiter",
+                    onPressed: () {
+                      onboardingProvider.createUser();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const CategorySelectionPage()));
+                    },
+                  ),
+                ],
+              );
+            }),
+      ),
+    );
   }
 }

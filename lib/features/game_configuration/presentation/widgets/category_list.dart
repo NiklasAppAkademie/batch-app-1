@@ -4,10 +4,7 @@ import 'package:quiz_app/features/game_configuration/domain/category_model.dart'
 import 'package:quiz_app/features/game_configuration/presentation/widgets/category_tile.dart';
 
 class CategoryList extends StatefulWidget {
-  final Category? selectedCategory;
-  final Function(Category) selectCategory;
-  const CategoryList(
-      {super.key, this.selectedCategory, required this.selectCategory});
+  const CategoryList({super.key});
 
   @override
   State<CategoryList> createState() => _CategoryListState();
@@ -36,10 +33,7 @@ class _CategoryListState extends State<CategoryList> {
                 children: categoryList
                     .map(
                       (val) => CategoryTile(
-                        name: val.name,
-                        selected: widget.selectedCategory == val,
                         category: val,
-                        selectCategory: widget.selectCategory,
                       ),
                     )
                     .toList(),

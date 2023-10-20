@@ -7,24 +7,15 @@ import 'package:quiz_app/core/presentation/styles/border_styles.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/features/onboarding/presentation/providers/onboarding_provider.dart';
 
-class CustomImagePicker extends StatefulWidget {
+class CustomImagePicker extends StatelessWidget {
   const CustomImagePicker({super.key});
 
-  @override
-  State<CustomImagePicker> createState() => _CustomImagePickerState();
-}
-
-class _CustomImagePickerState extends State<CustomImagePicker> {
-  String? imagePath;
-
-  void selectImage() async {
+  void selectImage(BuildContext context) async {
     XFile? tempFilePath =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     String? tempImagePath = tempFilePath?.path;
-    setState(() {
-      imagePath = tempImagePath;
-    });
-    context.read<OnboardingProvider>().setAvatarImagePath(imagePath);
+    Provider.of<OnboardingProvider>(context, listen: false)
+        .setAvatarImagePath(tempImagePath);
   }
 
   @override
@@ -37,21 +28,24 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
       child: Material(
         color: kColorGreyMedium,
         borderRadius: kBorderRadiusAllMedium,
-        child: InkWell(
-          borderRadius: kBorderRadiusAllMedium,
-          onTap: selectImage,
-          child: imagePath != null
-              ? Image.file(
-                  File(imagePath ?? ""),
-                  fit: BoxFit.cover,
-                )
-              : const Center(
-                  child: Icon(
-                  Icons.camera,
-                  color: kColorWhite,
-                  size: 100.0,
-                )),
-        ),
+        child:
+            Consumer<OnboardingProvider>(builder: (context, provider, child) {
+          return InkWell(
+            borderRadius: kBorderRadiusAllMedium,
+            onTap: () => selectImage(context),
+            child: provider.avatarImagePath.isNotEmpty
+                ? Image.file(
+                    File(provider.avatarImagePath),
+                    fit: BoxFit.cover,
+                  )
+                : const Center(
+                    child: Icon(
+                    Icons.camera,
+                    color: kColorWhite,
+                    size: 100.0,
+                  )),
+          );
+        }),
       ),
     );
   }

@@ -1,46 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/features/game_configuration/application/category_service.dart';
-import 'package:quiz_app/features/game_configuration/domain/category_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app/features/game_configuration/presentation/bloc/category_bloc.dart';
+import 'package:quiz_app/features/game_configuration/presentation/bloc/category_states.dart';
 import 'package:quiz_app/features/game_configuration/presentation/widgets/category_tile.dart';
 
-class CategoryList extends StatefulWidget {
+class CategoryList extends StatelessWidget {
   const CategoryList({super.key});
 
   @override
-  State<CategoryList> createState() => _CategoryListState();
-}
-
-class _CategoryListState extends State<CategoryList> {
-  final CategoryService categoryService = CategoryService();
-  Future<List<Category>>? categories;
-
-  @override
-  void initState() {
-    categories = categoryService.fetchCategories();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: categories,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<Category> categoryList = snapshot.data ?? [];
-            return Expanded(
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: categoryList
-                    .map(
-                      (val) => CategoryTile(
-                        category: val,
-                      ),
-                    )
-                    .toList(),
-              ),
-            );
-          }
-          return const CircularProgressIndicator();
-        });
+    return BlocBuilder<CategoryBloc, CategoryState>(builder: (context, state) {
+      if (state is LoadedCategoryState) {
+        return Expanded(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: state.categories
+                .map(
+                  (val) => CategoryTile(
+                    category: val,
+                  ),
+                )
+                .toList(),
+          ),
+        );
+      } else if (state is ErrorCategoryState) {
+        return const Center(
+          child: Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+        );
+      }
+      return const CircularProgressIndicator();
+    });
   }
 }

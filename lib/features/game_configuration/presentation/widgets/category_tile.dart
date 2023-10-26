@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app/core/presentation/styles/border_styles.dart';
 import 'package:quiz_app/core/presentation/styles/color_styles.dart';
 import 'package:quiz_app/core/presentation/styles/position_styles.dart';
 import 'package:quiz_app/core/presentation/styles/text_styles.dart';
 import 'package:quiz_app/features/game_configuration/domain/category_model.dart';
-import 'package:quiz_app/features/game_configuration/presentation/providers/category_provider.dart';
+import 'package:quiz_app/features/game_configuration/presentation/bloc/category_bloc.dart';
+import 'package:quiz_app/features/game_configuration/presentation/bloc/category_events.dart';
+import 'package:quiz_app/features/game_configuration/presentation/bloc/category_states.dart';
 
 class CategoryTile extends StatelessWidget {
   final Category category;
@@ -17,12 +19,15 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CategoryProvider>(builder: (context, provider, child) {
-      bool selected = category == provider.selectedCategory;
+    return BlocBuilder<CategoryBloc, CategoryState>(builder: (context, state) {
+      bool selected =
+          category == (state as LoadedCategoryState).selectedCategory;
       return Padding(
         padding: kPaddingVerMedium,
         child: GestureDetector(
-          onTap: () => provider.setSelectedCategory(category),
+          onTap: () => context
+              .read<CategoryBloc>()
+              .add(SelectCategory(category: category)),
           child: Container(
             height: 60,
             width: MediaQuery.of(context).size.width - 40,
